@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style type="text/css">
+      body {
+        padding: 50px 0;
+      }
+      .demo_section {
+        margin: 100px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center
+      }
+      .demo_section:first-child .controls_row {
+        margin: 30px 100px 30px 0;
+      }
+      .demo_section:last-child .controls_row {
+        margin: 30px 0 30px 100px;
+      }
+    </style>
+    <script src="https://vk.com/js/api/videoplayer.js"></script>
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.demo_section').forEach(initDemo);
+
+        function initDemo(container) {
+          const iframe = container.querySelector('iframe');
+          const player = VK.VideoPlayer(iframe);
+
+          const inputSeek = container.querySelector('.input_seek');
+          const inputVolume = container.querySelector('.input_volume');
+          const buttonPlay = container.querySelector('.button_play');
+          const buttonPause = container.querySelector('.button_pause');
+          const buttonMute = container.querySelector('.button_mute');
+          const buttonUnmute = container.querySelector('.button_unmute');
+
+          inputSeek.addEventListener('change', () => {
+            player.seek(inputSeek.value / 100 * player.getDuration());
+          });
+
+          inputSeek.addEventListener('mousedown', () => {
+            const wasPlaying = player.getState() === VK.VideoPlayer.States.PLAYING;
+            player.pause();
+            window.addEventListener('mouseup', function onDragEnd() {
+              if (wasPlaying) {
+                player.play();
+              }
+              window.removeEventListener('mouseup', onDragEnd);
+            });
+          });
+
+          inputVolume.addEventListener('input', () => {
+            player.setVolume(inputVolume.value / 100);
+          });
+
+          buttonPlay.addEventListener('click', () => {
+            player.play();
+          });
+
+          buttonPause.addEventListener('click', () => {
+            player.pause();
+          });
+
+          buttonMute.addEventListener('click', () => {
+            player.mute();
+          });
+
+          buttonUnmute.addEventListener('click', () => {
+            player.unmute();
+          });
+
+          player.on(VK.VideoPlayer.Events.TIMEUPDATE, (playerState) => {
+            inputSeek.value = playerState.time / playerState.duration * 100;
+          });
+
+          player.on(VK.VideoPlayer.Events.VOLUMECHANGE, (playerState) => {
+            inputVolume.value = playerState.volume * 100;
+          });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <section class="demo_section">
+    <div class="controls_container">
+      <div class="controls_row">
+        <button class="button_play btn btn-outline-secondary btn-sm">Play</button>
+        <button class="button_pause btn btn-outline-secondary btn-sm">Pause</button>
+        <button class="button_mute btn btn-outline-secondary btn-sm">Mute</button>
+        <button class="button_unmute btn btn-outline-secondary btn-sm">Unmute</button>
+      </div>
+      <div class="controls_row">
+        <label>Progess <input class="input_seek" type="range" min="0" max="100" value="0"></label>
+      </div>
+      <div class="controls_row">
+        <label>Volume <input class="input_volume" type="range" min="0" max="100" value="100"></label>
+      </div>
+    </div>
+    <iframe id="vk_video_embed1" src="https://vk.com/video_ext.php?oid=-22822305&id=456239528&hash=e592e431c98bc184&js_api=1" width="480" height="480" frameborder="0" allowfullscreen></iframe>
+  </section>
+  <section class="demo_section">
+    <iframe id="vk_video_embed2" src="https://vk.com/video_ext.php?oid=-22822305&id=456239538&hash=15f87e55319721ab&js_api=1" width="480" height="480" frameborder="0" allowfullscreen></iframe>
+    <div class="controls_container">
+      <div class="controls_row">
+        <button class="button_play btn btn-outline-secondary btn-sm">Play</button>
+        <button class="button_pause btn btn-outline-secondary btn-sm">Pause</button>
+        <button class="button_mute btn btn-outline-secondary btn-sm">Mute</button>
+        <button class="button_unmute btn btn-outline-secondary btn-sm">Unmute</button>
+      </div>
+      <div class="controls_row">
+        <label>Progess <input class="input_seek" type="range" min="0" max="100" value="0"></label>
+      </div>
+      <div class="controls_row">
+        <label>Volume <input class="input_volume" type="range" min="0" max="100" value="100"></label>
+      </div>
+    </div>
+  </section>
+  </body>
+</html>
