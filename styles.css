@@ -9,10 +9,10 @@ body {
   justify-content: center
 }
 
-.demo_section:first-child .controls_row {
+.demo_section:nth-child(1) .controls_row {
   margin: 30px 100px 30px 0;
 }
 
-.demo_section:last-child .controls_row {
+.demo_section:nth-child(2) .controls_row {
   margin: 30px 0 30px 100px;
 }
